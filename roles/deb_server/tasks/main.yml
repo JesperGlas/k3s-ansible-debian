@@ -1,0 +1,34 @@
+---
+- name: install apt-packages..
+  become: true
+  apt:
+    pkg:
+      - curl
+      - wget
+      - vim
+      - zsh
+      - git
+      - kitty-terminfo
+    update_cache: true
+
+- name: set up debian user..
+  become: true
+  user:
+    name: debian
+    shell: /usr/bin/zsh
+
+- name: configure zsh..
+  block:
+    - name: create .zsh directory..
+      file:
+        dest: /home/debian/.zsh
+        state: directory
+    - name: clone pure-promt..
+      git:
+        repo: https://github.com/sindresorhus/pure.git
+        dest: /home/debian/.zsh/pure
+        single_branch: true
+    - name:
+      copy:
+        src: .zshrc
+        dest: /home/debian/.zshrc
